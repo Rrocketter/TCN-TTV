@@ -370,3 +370,19 @@
 2024-07-23 18:36:44,352 - INFO - Found 16 observations for TIC 290348383
 2024-07-23 18:46:44,537 - ERROR - An error occurred while processing TIC 290348383: Timeout limit of 600 exceeded.
 2024-07-23 18:46:45,552 - INFO - Processing TIC 281459670
+2024-07-23 18:46:57,052 - INFO - Found 52 observations for TIC 281459670
+2024-07-23 18:47:19,603 - INFO - Downloaded products for TIC 281459670
+2024-07-23 18:47:20,610 - INFO - Processing TIC 318608749
+2024-07-23 18:47:49,099 - INFO - Found 27 observations for TIC 318608749
+2024-07-23 18:48:04,388 - INFO - Downloaded products for TIC 318608749
+2024-07-23 18:48:05,393 - INFO - Processing TIC 271581073
+2024-07-23 18:48:25,695 - INFO - Found 14 observations for TIC 271581073
+2024-07-23 18:48:38,862 - INFO - Downloaded products for TIC 271581073
+2024-07-23 18:48:39,869 - INFO - Processing TIC 311890977
+2024-07-23 18:48:52,203 - INFO - Found 9 observations for TIC 311890977
+2024-07-23 18:49:05,864 - WARNING - No SPOC light curve products found for TIC 311890977
+2024-07-23 18:49:06,867 - INFO - Processing TIC 351603103
+2024-07-23 18:49:13,460 - INFO - Found 6 observations for TIC 351603103
+2024-07-23 18:49:25,032 - INFO - Downloaded products for TIC 351603103
+2024-07-23 18:49:26,039 - INFO - Processing TIC 451599528
+2024-07-23 18:49:38,881 - INFO - Found 25 observations for TIC 451599528
