@@ -87,7 +87,7 @@ def process_all_tics(tic_ids, output_directory, resume_from=0):
 output_directory = '../data/tess/'
 
 # Process all TIC IDs
-process_all_tics(tic_ids, output_directory)
+# process_all_tics(tic_ids, output_directory)
 
 # If the script was interrupted, you can resume from a specific index
-# process_all_tics(tic_ids, output_directory, resume_from=1000)
+process_all_tics(tic_ids, output_directory, resume_from=404)

@@ -12,11 +12,11 @@ logging.basicConfig(filename='k2_download.log', level=logging.INFO,
                     format='%(asctime)s - %(levelname)s - %(message)s')
 
 # Load the list of K2 IDs (EPIC)
-ids = pd.read_csv('K2_targets.csv')['epic_id']
+ids = pd.read_csv('K2 Planets July 23.csv')['epic_hostname']
 
 
 def download_k2_data(epic_id, output_dir):
-    target_name = f"EPIC {epic_id}"
+    target_name = f"{epic_id}"
     logging.info(f"Processing {target_name}")
     try:
         # Query the K2 catalog
