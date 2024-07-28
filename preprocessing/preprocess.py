@@ -46,31 +46,40 @@ def prepare_tcn_input(time, flux, segment_length=1000, stride=500):
 
     return segments
 
-def process_directory(directory):
+def process_directory(directory, output_dir):
+    os.makedirs(output_dir, exist_ok=True)
     for root, dirs, files in os.walk(directory):
         for file in files:
             if file.endswith('.fits'):
                 fits_file = os.path.join(root, file)
+                output_file = os.path.join(output_dir, f"{os.path.splitext(file)[0]}.npz")
                 print(f"Processing: {fits_file}")
                 try:
                     time, flux = preprocess_light_curve(fits_file)
                     tcn_input = prepare_tcn_input(time, flux)
+                    np.savez(output_file, time=time, flux=flux, tcn_input=tcn_input)
+                    print(f"Saved processed data to: {output_file}")
                     print(f"TCN input shape: {tcn_input.shape}")
-                    print(f"Number of segments: {tcn_input.shape[0]}")
-                    print(f"Segment length: {tcn_input.shape[1]}")
                     print("---")
                 except Exception as e:
                     print(f"Error processing {fits_file}: {str(e)}")
                     print("---")
 
-# Directories to process
-directories = [
-    'data/kepler',
-    'data/k2',
-    'data/tess/mastdownload/TESS'
-]
+if __name__ == "__main__":
+    # Directories to process
+    directories = [
+        'data/kepler',
+        'data/k2',
+        'data/tess/mastdownload/TESS'
+    ]
 
-# Process each directory
-for directory in directories:
-    print(f"Processing directory: {directory}")
-    process_directory(directory)
+    # Output directory for processed data
+    output_base_dir = 'processed_data'
+
+    # Process each directory
+    for directory in directories:
+        print(f"Processing directory: {directory}")
+        output_dir = os.path.join(output_base_dir, os.path.basename(directory))
+        process_directory(directory, output_dir)
+
+print("Preprocessing complete. Data is ready for ML-specific preprocessing.")
