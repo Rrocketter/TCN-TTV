@@ -90,4 +90,4 @@ output_directory = '../data/tess/'
 # process_all_tics(tic_ids, output_directory)
 
 # If the script was interrupted, you can resume from a specific index
-process_all_tics(tic_ids, output_directory, resume_from=1193)
+process_all_tics(tic_ids, output_directory, resume_from=1585)
