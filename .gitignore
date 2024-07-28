@@ -1,2 +1,5 @@
 data
 /data
+/data_collection/kepler
+/data_collection/kepler/*
+/data_collection/tess/*
