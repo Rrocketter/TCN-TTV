@@ -6,7 +6,6 @@ from scipy import signal
 from astropy.timeseries import LombScargle
 import logging
 
-# Set up logging
 logging.basicConfig(filename='processing.log', level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 
@@ -136,7 +135,6 @@ def process_directory(directory, output_dir):
 
 
 if __name__ == "__main__":
-    # Base directory containing all datasets
     base_dir = '../data'
 
     # Directories to process
