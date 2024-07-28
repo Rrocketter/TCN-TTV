@@ -3,3 +3,7 @@ data
 /data_collection/kepler
 /data_collection/kepler/*
 /data_collection/tess/*
+/processed_data/*
+/processed_data/kepler/*
+/processed_data/tess/*
+/processed_data/k2/*
