@@ -7,15 +7,15 @@ from astropy.coordinates import SkyCoord
 import logging
 from tqdm import tqdm
 
-# Set up logging
+# logging
 logging.basicConfig(filename='tess_download.log', level=logging.INFO,
                     format='%(asctime)s - %(levelname)s - %(message)s')
 
-# Load the list of TIC IDs
+# Load list TIC IDs
 tic_ids = pd.read_csv('TESS Project Candidates 2024-07-23.csv')['tid']
 
 
-# Function to download TESS light curves
+# download TESS light curves
 def download_tess_data(tic_id, output_dir):
     target_name = f"TIC {tic_id}"
     logging.info(f"Processing {target_name}")
@@ -27,7 +27,7 @@ def download_tess_data(tic_id, output_dir):
             logging.warning(f"Could not find TIC entry for {target_name}")
             return None
 
-        # Create a SkyCoord object
+        #  SkyCoord object
         target_coord = SkyCoord(ra=tic_result['ra'][0], dec=tic_result['dec'][0], unit=(u.degree, u.degree))
 
         # Query observations
@@ -43,7 +43,7 @@ def download_tess_data(tic_id, output_dir):
                 logging.warning(f"No 2-minute cadence data found for {target_name}")
                 return None
 
-            # Download the light curves
+            # Download light curves
             data_products = Observations.get_product_list(two_min_cadence_obs)
             if len(data_products) > 0:
                 # Filter for SPOC products (2-minute cadence)
@@ -73,21 +73,18 @@ def process_all_tics(tic_ids, output_directory, resume_from=0):
         if download_tess_data(tic_id, output_directory) is not None:
             successful_downloads += 1
 
-        # Add a small delay to avoid overwhelming the server
+        # delay
         time.sleep(1)
 
-        # Periodically save progress
+        #  save progress
         if (i + 1) % 100 == 0:
             logging.info(f"Processed {i + 1} TIC IDs. Successful downloads: {successful_downloads}")
 
     logging.info(f"Finished processing all TIC IDs. Total successful downloads: {successful_downloads}")
 
 
-# Example usage
 output_directory = '../data/tess/'
 
-# Process all TIC IDs
 # process_all_tics(tic_ids, output_directory)
 
-# If the script was interrupted, you can resume from a specific index
-process_all_tics(tic_ids, output_directory, resume_from=5129)
+process_all_tics(tic_ids, output_directory, resume_from=6505)
