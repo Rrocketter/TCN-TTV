@@ -7,3 +7,6 @@ data
 /processed_data/kepler/*
 /processed_data/tess/*
 /processed_data/k2/*
+/ml_data/*
+ml_data
+preprocessing/ttv_detection.log
