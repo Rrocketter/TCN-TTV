@@ -22,16 +22,15 @@ def inspect_fits_file(fits_file):
 
 def preprocess_light_curve(fits_file, window_size=1001, polyorder=2):
     try:
-        # Open the FITS file
         with fits.open(fits_file) as hdul:
-            # Check the structure of the file
+            # Check  structure
             if 'LIGHTCURVE' in hdul:
-                # Kepler file structure
+                # Kepler
                 data = Table(hdul['LIGHTCURVE'].data)
                 time = data['TIME']
                 flux = None
                 if 'SAP_FLUX' in data.colnames:
-                    flux = data['SAP_FLUX']  # Using SAP_FLUX for Kepler data
+                    flux = data['SAP_FLUX']
                 elif 'PDCSAP_FLUX' in data.colnames:
                     flux = data['PDCSAP_FLUX']
                 elif 'FLUX' in data.colnames:
@@ -40,7 +39,7 @@ def preprocess_light_curve(fits_file, window_size=1001, polyorder=2):
                 else:
                     raise KeyError("No suitable flux column found in Kepler data.")
             else:
-                # Assume the data is in the first extension for other missions
+                # other missions
                 data = Table(hdul[1].data)
                 time = data['TIME']
                 flux = None
@@ -59,16 +58,16 @@ def preprocess_light_curve(fits_file, window_size=1001, polyorder=2):
         time = time[mask]
         flux = flux[mask]
 
-        # Normalize the flux
+        # Normalize flux
         flux_norm = flux / np.median(flux)
 
         # Detrend the light curve using Savitzky-Golay filter
         flux_detrended = signal.savgol_filter(flux_norm, window_size, polyorder)
 
-        # Calculate residuals (this will highlight transit signals)
+        # Calculate residuals (highlight transit signals)
         residuals = flux_norm - flux_detrended
 
-        # Interpolate to a regular time grid (TCNs typically require uniform sampling)
+        # Interpolate to regular time grid (uniform sampling)
         time_regular = np.linspace(time.min(), time.max(), len(time))
         flux_interpolated = np.interp(time_regular, time, residuals)
 
@@ -127,27 +126,34 @@ def process_file(fits_file, output_dir):
 def process_directory(directory, output_dir):
     os.makedirs(output_dir, exist_ok=True)
 
-    for root, dirs, files in os.walk(directory):
-        for file in files:
-            if file.endswith('.fits'):
-                fits_file = os.path.join(root, file)
-                process_file(fits_file, output_dir)
+    if 'tess' in directory.lower():
+        # TESS
+        for root, dirs, files in os.walk(directory):
+            for file in files:
+                if file.endswith('_lc.fits'):
+                    fits_file = os.path.join(root, file)
+                    process_file(fits_file, output_dir)
+    else:
+        # Kepler and K2
+        for root, dirs, files in os.walk(directory):
+            for file in files:
+                if file.endswith('.fits'):
+                    fits_file = os.path.join(root, file)
+                    process_file(fits_file, output_dir)
 
 
 if __name__ == "__main__":
     base_dir = '../data'
 
-    # Directories to process
     directories = [
-        os.path.join(base_dir, 'kepler'),
-        os.path.join(base_dir, 'k2'),
-        # os.path.join(base_dir, 'tess', 'mastDownload', 'TESS')
+        # os.path.join(base_dir, 'kepler'),
+        # os.path.join(base_dir, 'k2'),
+        os.path.join(base_dir, 'tess', 'mastDownload', 'TESS')
     ]
 
-    # Output directory for processed data
     output_base_dir = '../processed_data/'
 
-    # Process each directory
+    # Process directory
     for directory in directories:
         logging.info(f"Processing directory: {directory}")
         output_dir = os.path.join(output_base_dir, os.path.basename(directory))
