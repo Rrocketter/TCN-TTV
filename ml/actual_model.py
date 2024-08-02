@@ -6,6 +6,8 @@ from torch.optim.lr_scheduler import ReduceLROnPlateau
 from torch.utils.data import DataLoader, TensorDataset
 import numpy as np
 import os
+import matplotlib.pyplot as plt
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, roc_curve, auc
 
 data = np.load("../ml_data/ttv-dataset/ttv_detection_data.npz")
 X = data['X']
@@ -228,4 +230,67 @@ torch.save(model.state_dict(), 'optimized_ttv_detection_model.pth')
 print("Final model saved as 'optimized_ttv_detection_model.pth'")
 
 
-print("All outputs have been committed. Check the 'Output' tab to access your saved files.")
+# Make predictions
+model.eval()
+with torch.no_grad():
+    classification_pred, regression_pred = model(X_test.to(device))
+    classification_pred = torch.sigmoid(classification_pred).cpu().numpy()  # Apply sigmoid here for probabilities
+    regression_pred = regression_pred.cpu().numpy()
+
+# Evaluate the model
+y_pred = (classification_pred > 0.5).astype(int)
+accuracy = accuracy_score(y_test, y_pred)
+precision = precision_score(y_test, y_pred)
+recall = recall_score(y_test, y_pred)
+f1 = f1_score(y_test, y_pred)
+
+print(f"Accuracy: {accuracy:.4f}")
+print(f"Precision: {precision:.4f}")
+print(f"Recall: {recall:.4f}")
+print(f"F1 Score: {f1:.4f}")
+
+# Visualize results
+plt.figure(figsize=(12, 8))
+
+# Plot training history
+plt.subplot(2, 2, 1)
+plt.plot(train_losses, label='Training Loss')
+plt.plot(val_losses, label='Validation Loss')
+plt.title('Model Loss')
+plt.xlabel('Epoch')
+plt.ylabel('Loss')
+plt.legend()
+
+# Plot predicted vs true TTVs
+plt.subplot(2, 2, 2)
+plt.scatter(ttvs_test[y_test == 1], regression_pred[y_test == 1], alpha=0.5)
+plt.plot([ttvs_test.min(), ttvs_test.max()], [ttvs_test.min(), ttvs_test.max()], 'r--', lw=2)
+plt.title('Predicted vs True TTVs')
+plt.xlabel('True TTV (minutes)')
+plt.ylabel('Predicted TTV (minutes)')
+
+# Plot TTV distribution
+plt.subplot(2, 2, 3)
+plt.hist(ttvs_test[y_test == 1].numpy(), bins=30, alpha=0.5, label='True TTVs')
+plt.hist(regression_pred[y_pred == 1], bins=30, alpha=0.5, label='Predicted TTVs')
+plt.title('TTV Distribution')
+plt.xlabel('TTV (minutes)')
+plt.ylabel('Frequency')
+plt.legend()
+
+# Plot ROC curve
+fpr, tpr, _ = roc_curve(y_test, classification_pred)
+roc_auc = auc(fpr, tpr)
+
+plt.subplot(2, 2, 4)
+plt.plot(fpr, tpr, color='darkorange', lw=2, label=f'ROC curve (AUC = {roc_auc:.2f})')
+plt.plot([0, 1], [0, 1], color='navy', lw=2, linestyle='--')
+plt.xlim([0.0, 1.0])
+plt.ylim([0.0, 1.05])
+plt.xlabel('False Positive Rate')
+plt.ylabel('True Positive Rate')
+plt.title('Receiver Operating Characteristic (ROC) Curve')
+plt.legend(loc="lower right")
+
+plt.tight_layout()
+plt.show()

@@ -48,9 +48,16 @@ Activate the virtual environment:
     ```
 
 ### Install Dependencies
-Install the required dependencies using pip:
+Install the required dependencies using pip.
+
+#### Requirements for data + data preprocessing
 ```bash
-pip install -r requirements.txt
+pip install -r requirements/data-requirements.txt
+```
+
+#### Requirements for ml model
+```bash
+pip install -r requirements/model-requirements.txt
 ```
 
 ## Data Collection

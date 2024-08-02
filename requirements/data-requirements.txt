@@ -1,0 +1,8 @@
+numpy
+astropy
+scipy
+scikit-learn
+pandas
+lightkurve
+tqdm
+astroquery
