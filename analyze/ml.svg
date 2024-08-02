@@ -1,0 +1,89 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500">
+  <rect x="0" y="0" width="800" height="500" fill="#ffffff"/>
+
+  <!-- Input Layer -->
+  <g id="input-layer" transform="translate(0, 100)">
+    <circle cx="50" cy="100" r="20" fill="#FFB3BA" stroke="#000000" stroke-width="2"/>
+    <circle cx="50" cy="200" r="20" fill="#FFB3BA" stroke="#000000" stroke-width="2"/>
+    <circle cx="50" cy="300" r="20" fill="#FFB3BA" stroke="#000000" stroke-width="2"/>
+    <text x="50" y="50" font-family="Arial" font-size="16" text-anchor="middle">Input</text>
+  </g>
+
+  <!-- Conv1D Layer -->
+  <g id="conv1d-layer" transform="translate(0, 100)">
+    <rect x="150" y="50" width="100" height="300" fill="#BAFFC9" stroke="#000000" stroke-width="2" rx="10" ry="10"/>
+    <circle cx="200" cy="80" r="15" fill="#ffffff" stroke="#000000" stroke-width="2"/>
+    <circle cx="200" cy="160" r="15" fill="#ffffff" stroke="#000000" stroke-width="2"/>
+    <circle cx="200" cy="240" r="15" fill="#ffffff" stroke="#000000" stroke-width="2"/>
+    <circle cx="200" cy="320" r="15" fill="#ffffff" stroke="#000000" stroke-width="2"/>
+    <text x="200" y="40" font-family="Arial" font-size="16" text-anchor="middle">Conv1D</text>
+    <!-- Internal connections -->
+    <path d="M200,95 Q210,127.5 200,160" fill="none" stroke="#000000" stroke-width="1"/>
+    <path d="M200,175 Q210,207.5 200,240" fill="none" stroke="#000000" stroke-width="1"/>
+    <path d="M200,255 Q210,287.5 200,320" fill="none" stroke="#000000" stroke-width="1"/>
+  </g>
+
+  <!-- Gating Mechanism -->
+  <g id="gating-mechanism" transform="translate(0, 100)">
+    <rect x="300" y="50" width="100" height="300" fill="#BAE1FF" stroke="#000000" stroke-width="2" rx="10" ry="10"/>
+    <circle cx="350" cy="120" r="15" fill="#ffffff" stroke="#000000" stroke-width="2"/>
+    <circle cx="350" cy="280" r="15" fill="#ffffff" stroke="#000000" stroke-width="2"/>
+    <text x="350" y="40" font-family="Arial" font-size="16" text-anchor="middle">Gating</text>
+    <text x="350" y="100" font-family="Arial" font-size="14" text-anchor="middle">tanh</text>
+    <text x="350" y="260" font-family="Arial" font-size="14" text-anchor="middle">sigmoid</text>
+    <!-- Internal connection -->
+    <path d="M350,135 Q370,200 350,265" fill="none" stroke="#000000" stroke-width="1"/>
+  </g>
+
+  <!-- Attention Layer -->
+  <g id="attention-layer" transform="translate(0, 100)">
+    <rect x="450" y="50" width="100" height="300" fill="#FFFFBA" stroke="#000000" stroke-width="2" rx="10" ry="10"/>
+    <circle cx="500" cy="100" r="15" fill="#ffffff" stroke="#000000" stroke-width="2"/>
+    <circle cx="500" cy="200" r="15" fill="#ffffff" stroke="#000000" stroke-width="2"/>
+    <circle cx="500" cy="300" r="15" fill="#ffffff" stroke="#000000" stroke-width="2"/>
+    <text x="500" y="40" font-family="Arial" font-size="16" text-anchor="middle">Attention</text>
+    <!-- Internal connections -->
+    <path d="M500,115 Q510,157.5 500,200" fill="none" stroke="#000000" stroke-width="1"/>
+    <path d="M500,215 Q510,257.5 500,300" fill="none" stroke="#000000" stroke-width="1"/>
+  </g>
+
+  <!-- Output Layer -->
+  <g id="output-layer" transform="translate(0, 100)">
+    <circle cx="650" cy="150" r="20" fill="#FFB3BA" stroke="#000000" stroke-width="2"/>
+    <circle cx="650" cy="250" r="20" fill="#FFB3BA" stroke="#000000" stroke-width="2"/>
+    <text x="650" y="40" font-family="Arial" font-size="16" text-anchor="middle">Output</text>
+    <text x="650" y="130" font-family="Arial" font-size="14" text-anchor="middle">Class</text>
+    <text x="650" y="230" font-family="Arial" font-size="14" text-anchor="middle">TTV</text>
+  </g>
+
+  <!-- Connections between layers -->
+  <!-- Input to Conv1D -->
+  <path d="M70,200 Q110,190 150,180" fill="none" stroke="#000000" stroke-width="1"/>
+  <path d="M70,300 Q110,280 150,260" fill="none" stroke="#000000" stroke-width="1"/>
+  <path d="M70,400 Q110,370 150,340" fill="none" stroke="#000000" stroke-width="1"/>
+
+  <!-- Conv1D to Gating -->
+  <path d="M250,180 Q275,200 300,220" fill="none" stroke="#000000" stroke-width="1"/>
+  <path d="M250,340 Q275,360 300,380" fill="none" stroke="#000000" stroke-width="1"/>
+
+  <!-- Gating to Attention -->
+  <path d="M400,220 Q425,210 450,200" fill="none" stroke="#000000" stroke-width="1"/>
+  <path d="M400,380 Q425,390 450,400" fill="none" stroke="#000000" stroke-width="1"/>
+
+  <!-- Attention to Output -->
+  <path d="M550,200 Q600,225 630,250" fill="none" stroke="#000000" stroke-width="1"/>
+  <path d="M550,400 Q600,375 630,350" fill="none" stroke="#000000" stroke-width="1"/>
+
+  <!-- Legend -->
+  <rect x="50" y="450" width="700" height="40" fill="#f0f0f0" stroke="#000000" stroke-width="1"/>
+  <circle cx="80" cy="470" r="10" fill="#FFB3BA"/>
+  <text x="100" y="475" font-family="Arial" font-size="12">Input/Output</text>
+  <rect x="180" y="460" width="20" height="20" fill="#BAFFC9"/>
+  <text x="220" y="475" font-family="Arial" font-size="12">Conv1D</text>
+  <rect x="300" y="460" width="20" height="20" fill="#BAE1FF"/>
+  <text x="340" y="475" font-family="Arial" font-size="12">Gating</text>
+  <rect x="420" y="460" width="20" height="20" fill="#FFFFBA"/>
+  <text x="460" y="475" font-family="Arial" font-size="12">Attention</text>
+  <path d="M560,470 Q580,460 600,470" fill="none" stroke="#000000" stroke-width="1"/>
+  <text x="620" y="475" font-family="Arial" font-size="12">Connection</text>
+</svg>

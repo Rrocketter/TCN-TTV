@@ -1,0 +1,121 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000">
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#000"/>
+    </marker>
+  </defs>
+  <rect x="0" y="0" width="1600" height="1000" fill="#ffffff"/>
+
+  <!-- Input Layer -->
+  <g transform="translate(50, 450)">
+    <rect width="80" height="120" fill="#f0f0f0" stroke="black" stroke-width="2" />
+    <text x="40" y="-10" text-anchor="middle" font-weight="bold">Input</text>
+    <circle cx="40" cy="30" r="15" fill="#FFB3BA" stroke="black" />
+    <circle cx="40" cy="60" r="15" fill="#FFB3BA" stroke="black" />
+    <circle cx="40" cy="90" r="15" fill="#FFB3BA" stroke="black" />
+    <text x="40" y="140" text-anchor="middle" font-size="12">Light Curve</text>
+  </g>
+
+  <!-- TCN Block (GatedResidualNetwork) -->
+  <g transform="translate(180, 150)">
+    <rect width="400" height="700" fill="#ffe6e6" stroke="black" stroke-width="2" />
+    <text x="200" y="-10" text-anchor="middle" font-weight="bold">TCN Block (GatedResidualNetwork)</text>
+
+    <!-- Conv1D -->
+    <g transform="translate(20, 50)">
+      <rect width="360" height="100" fill="#BAFFC9" stroke="black" stroke-width="1" />
+      <text x="180" y="20" text-anchor="middle" font-weight="bold">Conv1D (kernel_size=3, dilation=1,2,4,8,16)</text>
+      <!-- Neurons -->
+      <circle cx="60" cy="60" r="15" fill="#BAFFC9" stroke="black" />
+      <circle cx="120" cy="60" r="15" fill="#BAFFC9" stroke="black" />
+      <circle cx="180" cy="60" r="15" fill="#BAFFC9" stroke="black" />
+      <circle cx="240" cy="60" r="15" fill="#BAFFC9" stroke="black" />
+      <circle cx="300" cy="60" r="15" fill="#BAFFC9" stroke="black" />
+      <!-- Connections -->
+      <path d="M60,60 Q90,30 120,60" fill="none" stroke="#000" stroke-width="2" marker-end="url(#arrowhead)"/>
+      <path d="M120,60 Q150,30 180,60" fill="none" stroke="#000" stroke-width="2" marker-end="url(#arrowhead)"/>
+      <path d="M180,60 Q210,30 240,60" fill="none" stroke="#000" stroke-width="2" marker-end="url(#arrowhead)"/>
+      <path d="M240,60 Q270,30 300,60" fill="none" stroke="#000" stroke-width="2" marker-end="url(#arrowhead)"/>
+    </g>
+
+    <!-- Gating Mechanism -->
+    <g transform="translate(20, 170)">
+      <rect width="170" height="80" fill="#BAE1FF" stroke="black" stroke-width="1" />
+      <text x="85" y="20" text-anchor="middle" font-weight="bold">tanh</text>
+      <circle cx="50" cy="50" r="15" fill="#BAE1FF" stroke="black" />
+      <circle cx="120" cy="50" r="15" fill="#BAE1FF" stroke="black" />
+      <!-- Connections -->
+      <path d="M50,50 Q85,20 120,50" fill="none" stroke="#000" stroke-width="2" marker-end="url(#arrowhead)"/>
+    </g>
+    <g transform="translate(210, 170)">
+      <rect width="170" height="80" fill="#BAE1FF" stroke="black" stroke-width="1" />
+      <text x="85" y="20" text-anchor="middle" font-weight="bold">sigmoid</text>
+      <circle cx="50" cy="50" r="15" fill="#BAE1FF" stroke="black" />
+      <circle cx="120" cy="50" r="15" fill="#BAE1FF" stroke="black" />
+      <!-- Connections -->
+      <path d="M50,50 Q85,20 120,50" fill="none" stroke="#000" stroke-width="2" marker-end="url(#arrowhead)"/>
+    </g>
+    <text x="200" y="270" text-anchor="middle" font-weight="bold">Gating Mechanism</text>
+
+    <!-- BatchNorm -->
+    <g transform="translate(20, 300)">
+      <rect width="360" height="80" fill="#90ee90" stroke="black" stroke-width="1" />
+      <text x="180" y="20" text-anchor="middle" font-weight="bold">BatchNorm1d</text>
+      <circle cx="90" cy="50" r="15" fill="#90ee90" stroke="black" />
+      <circle cx="180" cy="50" r="15" fill="#90ee90" stroke="black" />
+      <circle cx="270" cy="50" r="15" fill="#90ee90" stroke="black" />
+      <!-- Connections -->
+      <path d="M90,50 Q135,20 180,50" fill="none" stroke="#000" stroke-width="2" marker-end="url(#arrowhead)"/>
+      <path d="M180,50 Q225,20 270,50" fill="none" stroke="#000" stroke-width="2" marker-end="url(#arrowhead)"/>
+    </g>
+
+    <!-- Dropout -->
+    <g transform="translate(20, 400)">
+      <rect width="360" height="80" fill="#d3d3d3" stroke="black" stroke-width="1" />
+      <text x="180" y="20" text-anchor="middle" font-weight="bold">Dropout (0.1)</text>
+      <circle cx="90" cy="50" r="15" fill="#d3d3d3" stroke="black" />
+      <circle cx="180" cy="50" r="15" fill="#d3d3d3" stroke="black" />
+      <circle cx="270" cy="50" r="15" fill="#d3d3d3" stroke="black" />
+      <!-- Connections -->
+      <path d="M90,50 Q135,20 180,50" fill="none" stroke="#000" stroke-width="2" marker-end="url(#arrowhead)"/>
+      <path d="M180,50 Q225,20 270,50" fill="none" stroke="#000" stroke-width="2" marker-end="url(#arrowhead)"/>
+    </g>
+
+    <!-- LayerNorm -->
+    <g transform="translate(20, 500)">
+      <rect width="360" height="80" fill="#add8e6" stroke="black" stroke-width="1" />
+      <text x="180" y="20" text-anchor="middle" font-weight="bold">LayerNorm</text>
+      <circle cx="90" cy="50" r="15" fill="#add8e6" stroke="black" />
+      <circle cx="180" cy="50" r="15" fill="#add8e6" stroke="black" />
+      <circle cx="270" cy="50" r="15" fill="#add8e6" stroke="black" />
+      <!-- Connections -->
+      <path d="M90,50 Q135,20 180,50" fill="none" stroke="#000" stroke-width="2" marker-end="url(#arrowhead)"/>
+      <path d="M180,50 Q225,20 270,50" fill="none" stroke="#000" stroke-width="2" marker-end="url(#arrowhead)"/>
+    </g>
+
+    <!-- Residual Connection -->
+    <path d="M 0 50 C -30 50, -30 630, 0 630" stroke="red" fill="none" stroke-width="3" marker-end="url(#arrowhead)"/>
+    <text x="-40" y="340" transform="rotate(-90 -40,340)" text-anchor="middle" font-weight="bold">Residual Connection</text>
+  </g>
+  <g transform="translate(640, 450)">
+    <rect width="80" height="120" fill="#f0f0f0" stroke="black" stroke-width="2" />
+    <text x="40" y="-10" text-anchor="middle" font-weight="bold">Dense/FC</text>
+    <circle cx="40" cy="30" r="15" fill="#FFFFBA" stroke="black" />
+    <circle cx="40" cy="60" r="15" fill="#FFFFBA" stroke="black" />
+    <circle cx="40" cy="90" r="15" fill="#FFFFBA" stroke="black" />
+    <text x="40" y="140" text-anchor="middle" font-size="12">Fully Connected Layer</text>
+  </g>
+
+  <g transform="translate(800, 450)">
+    <rect width="80" height="120" fill="#f0f0f0" stroke="black" stroke-width="2" />
+    <text x="40" y="-10" text-anchor="middle" font-weight="bold">Output</text>
+    <circle cx="40" cy="30" r="15" fill="#FFDFBA" stroke="black" />
+    <circle cx="40" cy="60" r="15" fill="#FFDFBA" stroke="black" />
+    <circle cx="40" cy="90" r="15" fill="#FFDFBA" stroke="black" />
+    <text x="40" y="140" text-anchor="middle" font-size="12">Object Classes</text>
+  </g>
+      <path d="M130,90 C160,90, 160,500, 180,500" stroke="blue" fill="none" stroke-width="3" marker-end="url(#arrowhead)"/>
+  <path d="M580,500 C610,500, 610,90, 640,90" stroke="blue" fill="none" stroke-width="3" marker-end="url(#arrowhead)"/>
+  <path d="M720,90 C750,90, 750,500, 800,500" stroke="blue" fill="none" stroke-width="3" marker-end="url(#arrowhead)"/>
+</svg>
+
