@@ -7,8 +7,7 @@ from torch.utils.data import DataLoader, TensorDataset
 import numpy as np
 import os
 
-# Load the preprocessed data
-data = np.load("/kaggle/input/ttv-dataset/ttv_detection_data.npz")
+data = np.load("../ml_data/ttv-dataset/ttv_detection_data.npz")
 X = data['X']
 y = data['y']
 ttvs = data['ttvs']
@@ -228,8 +227,5 @@ for epoch in range(start_epoch, num_epochs):
 torch.save(model.state_dict(), 'optimized_ttv_detection_model.pth')
 print("Final model saved as 'optimized_ttv_detection_model.pth'")
 
-# Ensure Kaggle recognizes the saved files as outputs
-from kaggle_session import UserSessionClient
-UserSessionClient().commit()
 
 print("All outputs have been committed. Check the 'Output' tab to access your saved files.")
