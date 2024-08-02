@@ -9,7 +9,7 @@ import os
 import matplotlib.pyplot as plt
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, roc_curve, auc
 
-data = np.load("../ml_data/ttv-dataset/ttv_detection_data.npz")
+data = np.load("../ml_data/ttv_detection_data.npz")
 X = data['X']
 y = data['y']
 ttvs = data['ttvs']
@@ -175,6 +175,10 @@ num_epochs = 50
 accumulation_steps = 8
 save_every = 5  # Save every 5 epochs
 
+train_losses = []
+val_losses = []
+
+
 # Check if there's a checkpoint to resume from
 latest_checkpoint = max([f for f in os.listdir('.') if f.startswith('checkpoint_')], default=None)
 start_epoch = 0
@@ -205,6 +209,8 @@ for epoch in range(start_epoch, num_epochs):
 
         epoch_loss += loss.item() * accumulation_steps
 
+    train_losses.append(epoch_loss / len(train_loader))
+
     # Validation step
     model.eval()
     val_loss = 0
@@ -216,6 +222,7 @@ for epoch in range(start_epoch, num_epochs):
                 val_loss += custom_loss(val_outputs, batch_y, batch_ttv).item()
 
     val_loss /= len(test_loader)
+    val_losses.append(val_loss)
     scheduler.step(val_loss)
 
     print(f"Epoch {epoch + 1}/{num_epochs}, Train Loss: {epoch_loss / len(train_loader):.4f}, Val Loss: {val_loss:.4f}")
@@ -243,54 +250,76 @@ accuracy = accuracy_score(y_test, y_pred)
 precision = precision_score(y_test, y_pred)
 recall = recall_score(y_test, y_pred)
 f1 = f1_score(y_test, y_pred)
-
 print(f"Accuracy: {accuracy:.4f}")
 print(f"Precision: {precision:.4f}")
 print(f"Recall: {recall:.4f}")
 print(f"F1 Score: {f1:.4f}")
 
-# Visualize results
-plt.figure(figsize=(12, 8))
+
+
+def save_plot(fig, ax, filename):
+    ax.figure.savefig(filename, dpi=300, bbox_inches='tight')
+    plt.close(fig)
+
+# Visualize evaluation metrics
+fig, ax = plt.subplots(figsize=(10, 6))
+metrics = ['Accuracy', 'Precision', 'Recall', 'F1 Score']
+values = [accuracy, precision, recall, f1]
+ax.bar(metrics, values)
+ax.set_ylim(0, 1)
+ax.set_title('Model Evaluation Metrics')
+ax.set_ylabel('Score')
+
+# Add value labels on top of each bar
+for i, v in enumerate(values):
+    ax.text(i, v + 0.01, f'{v:.4f}', ha='center', va='bottom')
+
+# Save the plot
+save_plot(fig, ax, 'evaluation_metrics.png')
+
+print("Evaluation metrics plot has been saved as 'evaluation_metrics.png'.")
 
 # Plot training history
-plt.subplot(2, 2, 1)
-plt.plot(train_losses, label='Training Loss')
-plt.plot(val_losses, label='Validation Loss')
-plt.title('Model Loss')
-plt.xlabel('Epoch')
-plt.ylabel('Loss')
-plt.legend()
+fig, ax = plt.subplots(figsize=(8, 6))
+ax.plot(train_losses, label='Training Loss')
+ax.plot(val_losses, label='Validation Loss')
+ax.set_title('Model Loss')
+ax.set_xlabel('Epoch')
+ax.set_ylabel('Loss')
+ax.legend()
+save_plot(fig, ax, 'model_loss.png')
 
 # Plot predicted vs true TTVs
-plt.subplot(2, 2, 2)
-plt.scatter(ttvs_test[y_test == 1], regression_pred[y_test == 1], alpha=0.5)
-plt.plot([ttvs_test.min(), ttvs_test.max()], [ttvs_test.min(), ttvs_test.max()], 'r--', lw=2)
-plt.title('Predicted vs True TTVs')
-plt.xlabel('True TTV (minutes)')
-plt.ylabel('Predicted TTV (minutes)')
+fig, ax = plt.subplots(figsize=(8, 6))
+ax.scatter(ttvs_test[y_test == 1], regression_pred[y_test == 1], alpha=0.5)
+ax.plot([ttvs_test.min(), ttvs_test.max()], [ttvs_test.min(), ttvs_test.max()], 'r--', lw=2)
+ax.set_title('Predicted vs True TTVs')
+ax.set_xlabel('True TTV (minutes)')
+ax.set_ylabel('Predicted TTV (minutes)')
+save_plot(fig, ax, 'predicted_vs_true_ttvs.png')
 
 # Plot TTV distribution
-plt.subplot(2, 2, 3)
-plt.hist(ttvs_test[y_test == 1].numpy(), bins=30, alpha=0.5, label='True TTVs')
-plt.hist(regression_pred[y_pred == 1], bins=30, alpha=0.5, label='Predicted TTVs')
-plt.title('TTV Distribution')
-plt.xlabel('TTV (minutes)')
-plt.ylabel('Frequency')
-plt.legend()
+fig, ax = plt.subplots(figsize=(8, 6))
+ax.hist(ttvs_test[y_test == 1].numpy(), bins=30, alpha=0.5, label='True TTVs')
+ax.hist(regression_pred[y_pred == 1], bins=30, alpha=0.5, label='Predicted TTVs')
+ax.set_title('TTV Distribution')
+ax.set_xlabel('TTV (minutes)')
+ax.set_ylabel('Frequency')
+ax.legend()
+save_plot(fig, ax, 'ttv_distribution.png')
 
 # Plot ROC curve
+fig, ax = plt.subplots(figsize=(8, 6))
 fpr, tpr, _ = roc_curve(y_test, classification_pred)
 roc_auc = auc(fpr, tpr)
+ax.plot(fpr, tpr, color='darkorange', lw=2, label=f'ROC curve (AUC = {roc_auc:.2f})')
+ax.plot([0, 1], [0, 1], color='navy', lw=2, linestyle='--')
+ax.set_xlim([0.0, 1.0])
+ax.set_ylim([0.0, 1.05])
+ax.set_xlabel('False Positive Rate')
+ax.set_ylabel('True Positive Rate')
+ax.set_title('Receiver Operating Characteristic (ROC) Curve')
+ax.legend(loc="lower right")
+save_plot(fig, ax, 'roc_curve.png')
 
-plt.subplot(2, 2, 4)
-plt.plot(fpr, tpr, color='darkorange', lw=2, label=f'ROC curve (AUC = {roc_auc:.2f})')
-plt.plot([0, 1], [0, 1], color='navy', lw=2, linestyle='--')
-plt.xlim([0.0, 1.0])
-plt.ylim([0.0, 1.05])
-plt.xlabel('False Positive Rate')
-plt.ylabel('True Positive Rate')
-plt.title('Receiver Operating Characteristic (ROC) Curve')
-plt.legend(loc="lower right")
-
-plt.tight_layout()
-plt.show()
+print("All plots have been saved as PNG files.")
