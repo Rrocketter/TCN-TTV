@@ -12,5 +12,5 @@ def inspect_fits_file(fits_file):
             print(f"Other mission columns: {data.colnames}")
 
 # Example of how to use the inspect_fits_file function
-fits_file = '../data/kepler/4263293_light_curve_23.fits'
+fits_file = '../data/kepler/1432789_light_curve_1.fits'
 inspect_fits_file(fits_file)
